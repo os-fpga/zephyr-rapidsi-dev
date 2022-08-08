@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: Apache-2.0
+
+if SOC_RISCV_ANDES_AE250
+
+config SOC
+	string
+	default "ae250"
+
+config MAIN_STACK_SIZE
+	int
+	default 1536
+
+config TEST_EXTRA_STACKSIZE
+	int
+	default 1024
+
+config SYS_CLOCK_TICKS_PER_SEC
+	default 10000 if TICKLESS_KERNEL
+	default 100
+
+endif # SOC_RISCV_ANDES_AE250

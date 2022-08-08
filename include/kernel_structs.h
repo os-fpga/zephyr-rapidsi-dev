@@ -127,6 +127,16 @@ struct _cpu {
 #ifdef CONFIG_SMP
 	/* True when _current is allowed to context switch */
 	uint8_t swap_ok;
+
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+	/*
+	 * True if _current is added to ready_q/wait_q which make it public
+	 * to other CPU. Because _current may be used by other CPU, we must
+	 * release _current and choose the thread from ready_q. (It's
+	 * acceptable to choose the same thread as _current in ready_q.)
+	 */
+	uint8_t release_current;
+#endif
 #endif
 };
 

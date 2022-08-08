@@ -108,7 +108,12 @@ static void uart_tx_handle(const struct device *dev,
 		len = uart_fifo_fill(dev, data, len);
 		err = ring_buf_get_finish(sh_uart->tx_ringbuf, len);
 		__ASSERT_NO_MSG(err == 0);
-	} else {
+	}
+#ifdef CONFIG_SOC_SERIES_RISCV_ANDES_V5
+	if (ring_buf_is_empty(sh_uart->tx_ringbuf)){
+#else
+	else {
+#endif
 		uart_irq_tx_disable(dev);
 		sh_uart->ctrl_blk->tx_busy = 0;
 	}

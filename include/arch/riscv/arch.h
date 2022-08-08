@@ -21,6 +21,7 @@
 #include <arch/common/sys_io.h>
 #include <arch/common/ffs.h>
 
+#include <kernel_structs.h>
 #include <irq.h>
 #include <sw_isr_table.h>
 #include <soc.h>
@@ -109,6 +110,17 @@ void z_irq_spurious(const void *unused);
 #define ARCH_IRQ_CONNECT(irq_p, priority_p, isr_p, isr_param_p, flags_p) \
 { \
 	Z_ISR_DECLARE(irq_p, 0, isr_p, isr_param_p); \
+}
+#endif
+
+#ifdef CONFIG_SMP
+static ALWAYS_INLINE struct _cpu *arch_curr_cpu(void)
+{
+	_cpu_t* cpu;
+
+	__asm__ volatile("csrr %0, mscratch" : "=r" (cpu));
+
+	return cpu;
 }
 #endif
 

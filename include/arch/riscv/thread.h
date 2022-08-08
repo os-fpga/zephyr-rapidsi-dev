@@ -39,6 +39,7 @@ struct _callee_saved {
 
 	ulong_t s0;	/* saved register/frame pointer */
 	ulong_t s1;	/* saved register */
+#ifndef CONFIG_EMBEDDED_ISA
 	ulong_t s2;	/* saved register */
 	ulong_t s3;	/* saved register */
 	ulong_t s4;	/* saved register */
@@ -49,6 +50,7 @@ struct _callee_saved {
 	ulong_t s9;	/* saved register */
 	ulong_t s10;	/* saved register */
 	ulong_t s11;	/* saved register */
+#endif
 
 #if defined(CONFIG_FPU) && defined(CONFIG_FPU_SHARING)
 	uint32_t fcsr;		/* Control and status register */
@@ -64,6 +66,19 @@ struct _callee_saved {
 	RV_FP_TYPE fs9;		/* saved floating-point register */
 	RV_FP_TYPE fs10;	/* saved floating-point register */
 	RV_FP_TYPE fs11;	/* saved floating-point register */
+#endif
+
+#if defined(CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE)
+	/* There is an unavoidable SMP race when threads swap.
+	 * (see wait_for_switch())
+	 *
+	 * When restoring callee register, spin until these registers saved
+	 * by previous CPU to avoid race condition.
+	 *
+	 * 0 means all callee registers are saved so that we can restore it.
+	 * 1 means some callee registers aren't saved, please spin on it.
+	 */
+	uint32_t callee_state;	/* Callee saved context state */
 #endif
 };
 typedef struct _callee_saved _callee_saved_t;

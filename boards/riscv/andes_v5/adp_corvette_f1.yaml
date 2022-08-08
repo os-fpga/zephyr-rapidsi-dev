@@ -1,0 +1,15 @@
+identifier: adp_corvette_f1
+name: Andes ADP-Corvette-F1
+type: mcu
+arch: riscv32
+toolchain:
+  - cross-compile
+ram: 512
+supported:
+  - gpio
+  - counter
+  - spi
+  - i2c
+testing:
+  ignore_tags:
+    - bluetooth

@@ -1,0 +1,133 @@
+/*
+ * Copyright (c) 2021 Andes Technology Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <andes_v5_ae350.dtsi>
+
+/ {
+	model = "Andes VCU118 AE350";
+	compatible = "andestech,vcu118_ae350";
+
+	aliases {
+		gpio-0 = &gpio0;
+		counter-0 = &pit0;
+		spi-0 = &spi0;
+		lcd-0 = &lcd0;
+		eth-0 = &eth0;
+
+		led0 = &green_led1;
+		led1 = &green_led2;
+		sw0 = &button_center;
+	};
+
+	chosen {
+		zephyr,console = &uart1;
+		zephyr,shell-uart = &uart1;
+		zephyr,sram = &dram;
+		zephyr,flash = &flash0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		green_led1: led_1 {
+			label = "GPIO_LED_0";
+			gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
+		};
+		green_led2: led_2 {
+			label = "GPIO_LED_1";
+			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+		};
+		green_led3: led_3 {
+			label = "GPIO_LED_2";
+			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
+		};
+		green_led4: led_4 {
+			label = "GPIO_LED_3";
+			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+		};
+		green_led5: led_5 {
+			label = "GPIO_LED_4";
+			gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+		};
+		green_led6: led_6 {
+			label = "GPIO_LED_5";
+			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+		};
+		green_led7: led_7 {
+			label = "GPIO_LED_6";
+			gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
+		};
+		green_led8: led_8 {
+			label = "GPIO_LED_7";
+			gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio_keys {
+		compatible = "gpio-keys";
+
+		button_north: button_1 {
+			label = "GPIO_SW_N";
+			gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+		};
+		button_east: button_2 {
+			label = "GPIO_SW_E";
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+		};
+		button_west: button_3 {
+			label = "GPIO_SW_W";
+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+		};
+		button_south: button_4 {
+			label = "GPIO_SW_S";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		};
+		button_center: button_5 {
+			label = "GPIO_SW_C";
+			gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
+		};
+	};
+};
+
+/* Note: AE350 on VCU118 doesn't have I2C and 2nd SPI */
+/delete-node/ &i2c0;
+/delete-node/ &spi1;
+
+&uart1 {
+	status = "okay";
+	clock-frequency = <19660800>;
+	current-speed = <115200>;
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&pit0 {
+	status = "okay";
+};
+
+&spi0 {
+	status = "okay";
+	flash0: flash@0 {
+		compatible = "jedec,spi-nor";
+		size = <16777216>;
+		label = "JEDEC SPI-NOR";
+		spi-max-frequency = <1000000>;
+		reg = <0>;
+		status = "okay";
+		jedec-id = [c2 25 35];
+	};
+};
+
+&lcd0 {
+	status = "okay";
+};
+&eth0 {
+	status = "okay";
+};

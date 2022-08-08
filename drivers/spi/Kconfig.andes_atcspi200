@@ -1,0 +1,29 @@
+# Kconfig Andes ATCSPI200 SPI configuration options
+#
+# Copyright (c) 2019 Andes Technology Corporation.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig SPI_ANDES_ATCSPI200
+	bool "Andes ATCSPI200 SPI driver"
+	depends on SOC_SERIES_RISCV_ANDES_V5
+	help
+	  Enable driver for Andes ATCSPI200 SPI controller
+
+if SPI_ANDES_ATCSPI200
+
+config ANDES_ATCSPI200_SPI_0_ROM
+	bool "SPI 0 is used to access SPI Flash ROM"
+	help
+	  If enabled, SPI 0 is reserved for accessing the SPI flash ROM and a
+	  driver interface won't be instantiated for SPI 0. This option is used
+	  in XIP mode.
+
+	  Cannot disable this option in XIP mode on Andes AE250/AE350 platforms.
+	  In XIP mode, The SPI flash ROM is where program stored, so the
+	  instruction fetch will use SPI 0 to access ROM. If this driver
+	  initializes the interface for peripheral control, CPU may get
+	  exception on instruction fetch.
+
+endif # SPI_ANDES_ATCSPI200

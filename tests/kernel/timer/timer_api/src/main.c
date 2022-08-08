@@ -19,6 +19,8 @@ struct timer_data {
 #define EXPIRE_TIMES 4
 #define WITHIN_ERROR(var, target, epsilon)       \
 		(((var) >= (target)) && ((var) <= (target) + (epsilon)))
+/* One tick tolerance for timer */
+#define TICK_TOLERANCE (1000 / CONFIG_SYS_CLOCK_TICKS_PER_SEC)
 /* ms can be converted precisely to ticks only when a ms is exactly
  * represented by an integral number of ticks.  If the conversion is
  * not precise, then the reverse conversion of a difference in ms can
@@ -91,13 +93,15 @@ static void duration_expire(struct k_timer *timer)
 
 	tdata.expire_cnt++;
 	if (tdata.expire_cnt == 1) {
-		TIMER_ASSERT((interval >= DURATION)
+		TIMER_ASSERT((interval >= DURATION - TICK_TOLERANCE)
 			     || (INEXACT_MS_CONVERT
-				 && (interval == DURATION - 1)), timer);
+			     && (interval >= DURATION - 1 - TICK_TOLERANCE))
+			     ,timer);
 	} else {
-		TIMER_ASSERT((interval >= PERIOD)
+		TIMER_ASSERT((interval >= PERIOD - TICK_TOLERANCE)
 			     || (INEXACT_MS_CONVERT
-				 && (interval == PERIOD - 1)), timer);
+			     && (interval >= PERIOD - 1 - TICK_TOLERANCE))
+			     , timer);
 	}
 
 	if (tdata.expire_cnt >= EXPIRE_TIMES) {

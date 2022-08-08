@@ -74,7 +74,7 @@ static inline char *z_stack_ptr_align(char *ptr)
  * @return Pointer to stack frame struct within the stack buffer
  */
 #define Z_STACK_PTR_TO_FRAME(type, ptr) \
-	(type *)((ptr) - sizeof(type))
+	(type *)((ptr) - ROUND_UP(sizeof(type), ARCH_STACK_PTR_ALIGN))
 
 #ifdef ARCH_KERNEL_STACK_RESERVED
 #define K_KERNEL_STACK_RESERVED	((size_t)ARCH_KERNEL_STACK_RESERVED)

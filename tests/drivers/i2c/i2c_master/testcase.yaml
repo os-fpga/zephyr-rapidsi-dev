@@ -1,0 +1,15 @@
+common:
+    depends_on: i2c
+    tags: drivers i2c
+    harness: sensor
+    filter: dt_alias_exists("i2c-0") or
+            dt_alias_exists("i2c-1") or
+            dt_alias_exists("i2c-2")
+    platform_allow: adp_xc7k_ae250 adp_xc7k_ae350 vcu118_ae350 adp_corvette_f1
+
+tests:
+  drivers.i2c_master_ctrl_eeprom_on_board:
+    extra_args: CTRL_SIMU_EEPROM=0
+
+  drivers.i2c_master_ctrl_simulated_eeprom:
+    extra_args: CTRL_SIMU_EEPROM=1

@@ -68,6 +68,8 @@ source "drivers/gpio/Kconfig.rv32m1"
 
 source "drivers/gpio/Kconfig.ht16k33"
 
+source "drivers/gpio/Kconfig.andes_atcgpio100"
+
 source "drivers/gpio/Kconfig.lmp90xxx"
 
 source "drivers/gpio/Kconfig.litex"

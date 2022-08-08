@@ -7,6 +7,7 @@
 #include <irq.h>
 #include <irq_offload.h>
 #include <sys/printk.h>
+#include <spinlock.h>
 
 volatile irq_offload_routine_t _offload_routine;
 static volatile const void *offload_param;
@@ -33,13 +34,15 @@ void z_irq_do_offload(void)
 
 void arch_irq_offload(irq_offload_routine_t routine, const void *parameter)
 {
-	unsigned int key;
+	struct k_spinlock lock = {};
+	k_spinlock_key_t key;
 
-	key = irq_lock();
+	key = k_spin_lock(&lock);
+
 	_offload_routine = routine;
 	offload_param = parameter;
 
 	__asm__ volatile ("ecall");
 
-	irq_unlock(key);
+	k_spin_unlock(&lock, key);
 }

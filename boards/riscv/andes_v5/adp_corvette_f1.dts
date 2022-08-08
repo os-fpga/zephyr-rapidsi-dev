@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2021 Andes Technology Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <andes_v5_ae250.dtsi>
+
+/ {
+	model = "Andes ADP-Corvette-F1";
+	compatible = "andestech,adp_corvette_f1";
+
+	aliases {
+		gpio-0 = &gpio0;
+		counter-0 = &pit0;
+		spi-0 = &spi0;
+		spi-1 = &spi1;
+		spi-2 = &spi2;
+		spi-3 = &spi3;
+		i2c-0 = &i2c0;
+
+		led0 = &green_led1;
+		led1 = &green_led2;
+		sw0 = &user_button1;
+	};
+
+	chosen {
+		zephyr,console = &uart1;
+		zephyr,shell-uart = &uart1;
+		zephyr,flash = &flash0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		green_led1: led_1 {
+			label = "LED1";
+			gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+		};
+		green_led2: led_2 {
+			label = "LED2";
+			gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
+		};
+		green_led3: led_3 {
+			label = "LED3";
+			gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+		};
+		green_led4: led_4 {
+			label = "LED4";
+			gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio_keys {
+		compatible = "gpio-keys";
+
+		user_button1: button_1 {
+			label = "BTN1";
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+		};
+		user_button2: button_2 {
+			label = "BTN2";
+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+		};
+		user_button3: button_3 {
+			label = "BTN3";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		};
+		user_button4: button_4 {
+			label = "BTN4";
+			gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	soc {
+		spi2: spi@f1900000 {
+			compatible = "andestech,atcspi200";
+			label = "spi_2";
+			reg = <0xf1900000 0x1000>;
+			reg-names = "control";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			num-cs = <1>;
+			clock-frequency = <66000000>;
+			interrupts = <26 1>;
+			interrupt-parent = <&plic0>;
+			status = "disabled";
+		};
+
+		spi3: spi@f1a00000 {
+			compatible = "andestech,atcspi200";
+			label = "spi_3";
+			reg = <0xf1a00000 0x1000>;
+			reg-names = "control";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			num-cs = <1>;
+			clock-frequency = <66000000>;
+			interrupts = <27 1>;
+			interrupt-parent = <&plic0>;
+			status = "disabled";
+		};
+	};
+};
+
+&ilm {
+	reg = <0x00000000 0x00040000>;
+};
+
+&dlm {
+	reg = <0x00200000 0x00020000>;
+};
+
+&uart1 {
+	status = "okay";
+	clock-frequency = <19660800>;
+	current-speed = <115200>;
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&pit0 {
+	status = "okay";
+};
+
+&spi0 {
+	status = "okay";
+	flash0: flash@0 {
+		compatible = "jedec,spi-nor";
+		size = <16777216>;
+		label = "JEDEC SPI-NOR";
+		spi-max-frequency = <1000000>;
+		reg = <0>;
+		status = "okay";
+		jedec-id = [c2 20 16];
+	};
+};
+
+&spi1 {
+	status = "okay";
+};
+
+&spi2 {
+	status = "okay";
+};
+
+&spi3 {
+	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+};

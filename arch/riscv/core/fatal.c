@@ -18,14 +18,21 @@ FUNC_NORETURN void z_riscv_fatal_error(unsigned int reason,
 			esf->mepc);
 		LOG_ERR("  ra: 0x%08lx  gp: 0x%08lx  tp: 0x%08lx  t0: 0x%08lx",
 			esf->ra, esf->gp, esf->tp, esf->t0);
+#ifndef CONFIG_EMBEDDED_ISA
 		LOG_ERR("  t1: 0x%08lx  t2: 0x%08lx  t3: 0x%08lx  t4: 0x%08lx",
 			esf->t1, esf->t2, esf->t3, esf->t4);
 		LOG_ERR("  t5: 0x%08lx  t6: 0x%08lx  a0: 0x%08lx  a1: 0x%08lx",
 			esf->t5, esf->t6, esf->a0, esf->a1);
+#else
+		LOG_ERR("  t1: 0x%08lx  t2: 0x%08lx  a0: 0x%08lx  a1: 0x%08lx",
+			esf->t1, esf->t2, esf->a0, esf->a1);
+#endif
 		LOG_ERR("  a2: 0x%08lx  a3: 0x%08lx  a4: 0x%08lx  a5: 0x%08lx",
 			esf->a2, esf->a3, esf->a4, esf->a5);
+#ifndef CONFIG_EMBEDDED_ISA
 		LOG_ERR("  a6: 0x%08lx  a7: 0x%08lx\n",
 			esf->a6, esf->a7);
+#endif
 	}
 
 	z_fatal_error(reason, esf);

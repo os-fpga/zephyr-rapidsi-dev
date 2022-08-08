@@ -1,0 +1,7 @@
+
+config SOC_SERIES_RISCV_ANDES_V5
+	bool "Andes V5 SoC Series Implementation"
+	select RISCV
+	select SOC_FAMILY_RISCV_PRIVILEGE
+	help
+	  Enable support for Andes V5 SoC Series

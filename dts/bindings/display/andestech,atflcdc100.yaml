@@ -1,0 +1,27 @@
+#
+# Copyright (c) 2019, NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+description:
+    This binding gives a base representation of Andes ATFLCD100 controller
+
+compatible: "andestech,atflcdc100"
+
+include: base.yaml
+
+properties:
+
+    reg:
+      required: true
+
+    interrupts:
+      required: true
+
+    label:
+      required: true
+
+    clock-frequency:
+      type: int
+      required: true

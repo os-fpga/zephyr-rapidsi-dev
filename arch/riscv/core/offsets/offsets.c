@@ -32,6 +32,7 @@ GEN_OFFSET_SYM(_thread_arch_t, swap_return_value);
 GEN_OFFSET_SYM(_callee_saved_t, sp);
 GEN_OFFSET_SYM(_callee_saved_t, s0);
 GEN_OFFSET_SYM(_callee_saved_t, s1);
+#ifndef CONFIG_EMBEDDED_ISA
 GEN_OFFSET_SYM(_callee_saved_t, s2);
 GEN_OFFSET_SYM(_callee_saved_t, s3);
 GEN_OFFSET_SYM(_callee_saved_t, s4);
@@ -42,6 +43,7 @@ GEN_OFFSET_SYM(_callee_saved_t, s8);
 GEN_OFFSET_SYM(_callee_saved_t, s9);
 GEN_OFFSET_SYM(_callee_saved_t, s10);
 GEN_OFFSET_SYM(_callee_saved_t, s11);
+#endif
 
 #if defined(CONFIG_FPU) && defined(CONFIG_FPU_SHARING)
 GEN_OFFSET_SYM(_callee_saved_t, fcsr);
@@ -59,6 +61,10 @@ GEN_OFFSET_SYM(_callee_saved_t, fs10);
 GEN_OFFSET_SYM(_callee_saved_t, fs11);
 #endif
 
+#if defined(CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE)
+GEN_OFFSET_SYM(_callee_saved_t, callee_state);
+#endif
+
 /* esf member offsets */
 GEN_OFFSET_SYM(z_arch_esf_t, ra);
 GEN_OFFSET_SYM(z_arch_esf_t, gp);
@@ -66,18 +72,22 @@ GEN_OFFSET_SYM(z_arch_esf_t, tp);
 GEN_OFFSET_SYM(z_arch_esf_t, t0);
 GEN_OFFSET_SYM(z_arch_esf_t, t1);
 GEN_OFFSET_SYM(z_arch_esf_t, t2);
+#ifndef CONFIG_EMBEDDED_ISA
 GEN_OFFSET_SYM(z_arch_esf_t, t3);
 GEN_OFFSET_SYM(z_arch_esf_t, t4);
 GEN_OFFSET_SYM(z_arch_esf_t, t5);
 GEN_OFFSET_SYM(z_arch_esf_t, t6);
+#endif
 GEN_OFFSET_SYM(z_arch_esf_t, a0);
 GEN_OFFSET_SYM(z_arch_esf_t, a1);
 GEN_OFFSET_SYM(z_arch_esf_t, a2);
 GEN_OFFSET_SYM(z_arch_esf_t, a3);
 GEN_OFFSET_SYM(z_arch_esf_t, a4);
 GEN_OFFSET_SYM(z_arch_esf_t, a5);
+#ifndef CONFIG_EMBEDDED_ISA
 GEN_OFFSET_SYM(z_arch_esf_t, a6);
 GEN_OFFSET_SYM(z_arch_esf_t, a7);
+#endif
 
 GEN_OFFSET_SYM(z_arch_esf_t, mepc);
 GEN_OFFSET_SYM(z_arch_esf_t, mstatus);
@@ -113,6 +123,9 @@ GEN_OFFSET_SYM(z_arch_esf_t, soc_context);
 GEN_SOC_OFFSET_SYMS();
 #endif
 
+#ifdef CONFIG_USE_SWITCH
+GEN_OFFSET_SYM(_thread_t, switch_handle);
+#endif /* CONFIG_USE_SWITCH */
 /*
  * RISC-V requires the stack to be 16-bytes aligned, hence SP needs to grow or
  * shrink by a size, which follows the RISC-V stack alignment requirements

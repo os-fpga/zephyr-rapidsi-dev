@@ -1,0 +1,76 @@
+# Kconfig Andes ATCSPI200 SPI configuration options
+#
+# Copyright (c) 2019 Andes Technology Corporation.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+menuconfig ETH_ANDES_ATFMAC100
+	bool "Andes ATFMAC100 ETH driver"
+	depends on SOC_RISCV_ANDES_AE350
+	depends on !CACHE_ENABLE || SOC_ANDES_V5_CM || NOCACHE_MEMORY
+	help	
+	  Enable driver for Andes ATFMAC100 ETH controller
+
+config ANDES_ATFMAC100_TX_POLLING_MODE
+	bool
+	default y if ETH_ANDES_ATFMAC100
+
+config SHELL_BACKEND_SERIAL_INTERRUPT_DRIVEN
+	bool
+	default n if ETH_ANDES_ATFMAC100
+
+config ENTROPY_GENERATOR
+	bool
+	default y if ETH_ANDES_ATFMAC100
+
+config TEST_RANDOM_GENERATOR
+	bool
+	default y if ETH_ANDES_ATFMAC100
+
+config MAIN_STACK_SIZE
+	int
+	default 4096 if ETH_ANDES_ATFMAC100
+
+config NET_TX_STACK_SIZE
+	int
+	default 8192 if ETH_ANDES_ATFMAC100
+
+config NET_RX_STACK_SIZE
+	int
+	default 8192 if ETH_ANDES_ATFMAC100
+
+config SYSTEM_WORKQUEUE_STACK_SIZE
+	int
+	default 4096 if ETH_ANDES_ATFMAC100
+
+config HEAP_MEM_POOL_SIZE
+	int
+	default 16384 if ETH_ANDES_ATFMAC100
+
+config NET_MAX_CONTEXTS
+	int
+	default 20 if ETH_ANDES_ATFMAC100
+
+config NET_DHCPV4_INITIAL_DELAY_MAX
+	int
+	default 10 if ETH_ANDES_ATFMAC100
+
+config NET_BUF_DATA_SIZE
+	int
+	default 2048 if ETH_ANDES_ATFMAC100
+
+config NET_PKT_RX_COUNT
+	int
+	default 30 if ETH_ANDES_ATFMAC100
+
+config NET_PKT_TX_COUNT
+	int
+	default 30 if ETH_ANDES_ATFMAC100
+
+config NET_ARP_TABLE_SIZE
+	int
+	default 20 if ETH_ANDES_ATFMAC100
+
+config ZTEST_STACKSIZE
+	int
+	default 4096 if ETH_ANDES_ATFMAC100

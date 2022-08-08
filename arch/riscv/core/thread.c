@@ -17,6 +17,7 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 		     void *p1, void *p2, void *p3)
 {
 	struct __esf *stack_init;
+	extern long __global_pointer$;
 
 #ifdef CONFIG_RISCV_SOC_CONTEXT_SAVE
 	const struct soc_esf soc_esf_init = {SOC_ESF_INIT};
@@ -30,6 +31,7 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 	stack_init->a1 = (ulong_t)p1;
 	stack_init->a2 = (ulong_t)p2;
 	stack_init->a3 = (ulong_t)p3;
+	stack_init->gp = (ulong_t)&__global_pointer$;
 	/*
 	 * Following the RISC-V architecture,
 	 * the MSTATUS register (used to globally enable/disable interrupt),
@@ -66,7 +68,16 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 	stack_init->soc_context = soc_esf_init;
 #endif
 
+#ifdef CONFIG_USE_SWITCH
+	thread->switch_handle = (void *)stack_init;
+#else
 	thread->callee_saved.sp = (ulong_t)stack_init;
+#endif /* CONFIG_USE_SWITCH */
+
+#ifdef CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE
+	/* All callee registers are saved. */
+	thread->callee_saved.callee_state = 0;
+#endif
 }
 
 #if defined(CONFIG_FPU) && defined(CONFIG_FPU_SHARING)
