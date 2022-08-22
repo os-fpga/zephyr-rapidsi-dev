@@ -24,6 +24,7 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 {
 	extern void z_riscv_thread_start(void);
 	struct __esf *stack_init;
+	extern long __global_pointer$;
 
 #ifdef CONFIG_RISCV_SOC_CONTEXT_SAVE
 	const struct soc_esf soc_esf_init = {SOC_ESF_INIT};
@@ -37,6 +38,7 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 	/* Setup the initial stack frame */
 	stack_init->a0 = (ulong_t)entry;
 	stack_init->a1 = (ulong_t)p1;
+	stack_init->gp = (ulong_t)&__global_pointer$;
 	stack_init->a2 = (ulong_t)p2;
 	stack_init->a3 = (ulong_t)p3;
 
@@ -112,7 +114,16 @@ void arch_new_thread(struct k_thread *thread, k_thread_stack_t *stack,
 	stack_init->soc_context = soc_esf_init;
 #endif
 
+#ifdef CONFIG_USE_SWITCH
+	thread->switch_handle = (void *)stack_init;
+#else
 	thread->callee_saved.sp = (ulong_t)stack_init;
+#endif /* CONFIG_USE_SWITCH */
+
+#ifdef CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE
+	/* All callee registers are saved. */
+	thread->callee_saved.callee_state = 0;
+#endif
 
 	/* where to go when returning from z_riscv_switch() */
 	thread->callee_saved.ra = (ulong_t)z_riscv_thread_start;

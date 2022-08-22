@@ -50,6 +50,8 @@ source "drivers/counter/Kconfig.mcux_qtmr"
 
 source "drivers/counter/Kconfig.mcux_snvs"
 
+source "drivers/counter/Kconfig.andes_atcpit100"
+
 source "drivers/counter/Kconfig.xec"
 
 source "drivers/counter/Kconfig.mcux_lptmr"

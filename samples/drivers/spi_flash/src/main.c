@@ -66,6 +66,7 @@ void main(void)
 	printf("\nTest 2: Flash write\n");
 
 	printf("Attempting to write %zu bytes\n", len);
+    printf("Attempting to write %lu bytes\n", (unsigned long)len);
 	rc = flash_write(flash_dev, SPI_FLASH_TEST_REGION_OFFSET, expected, len);
 	if (rc != 0) {
 		printf("Flash write failed! %d\n", rc);

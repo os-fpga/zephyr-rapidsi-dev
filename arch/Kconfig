@@ -97,6 +97,7 @@ config NIOS2
 	select ARCH_IS_SET
 	select ATOMIC_OPERATIONS_C
 	select HAS_DTS
+	select USE_SWITCH_SUPPORTED
 	imply XIP
 	select ARCH_HAS_TIMING_FUNCTIONS
 	help

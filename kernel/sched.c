@@ -52,6 +52,33 @@ static ALWAYS_INLINE void z_priq_mq_remove(struct _priq_mq *pq,
 #define _priq_wait_remove	z_priq_dumb_remove
 #define _priq_wait_best		z_priq_dumb_best
 #endif
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+#undef _priq_run_add
+#undef z_priq_wait_add
+
+#if defined(CONFIG_SCHED_DUMB)
+#define _priq_run_add_raw	z_priq_dumb_add
+#elif defined(CONFIG_SCHED_SCALABLE)
+#define _priq_run_add_raw	z_priq_rb_add
+#elif defined(CONFIG_SCHED_MULTIQ)
+#define _priq_run_add_raw	z_priq_mq_add
+#endif
+#if defined(CONFIG_WAITQ_SCALABLE)
+#define z_priq_wait_add_raw		z_priq_rb_add
+#elif defined(CONFIG_WAITQ_DUMB)
+#define z_priq_wait_add_raw		z_priq_dumb_add
+#endif
+
+#define _priq_run_add(pq, thread) { \
+	thread_public_in_smp(thread); \
+	_priq_run_add_raw(pq, thread); \
+}
+#define z_priq_wait_add(pq, thread) { \
+	thread_public_in_smp(thread); \
+	z_priq_wait_add_raw(pq, thread); \
+}
+#endif /* CONFIG_SMP_HOTFIX_RELEASE_CURRENT */
+
 
 struct k_spinlock sched_spinlock;
 
@@ -309,6 +336,35 @@ static inline bool is_aborting(struct k_thread *thread)
 }
 #endif
 
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+/*
+ * Before making current thread public to other CPUs by adding it to
+ * ready_q/wait_q ... etc, call this API at first to protect synchronization
+ * in SMP.
+ */
+static ALWAYS_INLINE void thread_public_in_smp(struct k_thread *thread)
+{
+	if (_current == thread) {
+		/*
+		 * if current thread is public to other, always release _current
+		 * and choose next thread from ready_q in next_up(). (p.s. It's
+		 * possible to choose the current thread again from ready_q.)
+		 */
+		if (_current_cpu->release_current == 0) {
+			_current_cpu->release_current = 1;
+		}
+
+		/*
+		 * thread->switch_handle must be $sp or NULL
+		 * if it is added to ready_q or wait_q
+		 */
+		if (thread->switch_handle == thread) {
+			thread->switch_handle = NULL;
+		}
+	}
+}
+#endif /* CONFIG_SMP_HOTFIX_RELEASE_CURRENT */
+
 static ALWAYS_INLINE struct k_thread *next_up(void)
 {
 	struct k_thread *thread = runq_best();
@@ -357,11 +413,21 @@ static ALWAYS_INLINE struct k_thread *next_up(void)
 	bool queued = z_is_thread_queued(_current);
 	bool active = !z_is_thread_prevented_from_running(_current);
 
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+	/* release current if it may have been used by other CPU. */
+	uint8_t release_current = _current_cpu->release_current;
+	_current_cpu->release_current = 0;
+#endif
+
 	if (thread == NULL) {
 		thread = _current_cpu->idle_thread;
 	}
 
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+	if (active && !release_current) {
+#else
 	if (active) {
+#endif
 		int32_t cmp = z_sched_prio_cmp(_current, thread);
 
 		/* Ties only switch if state says we yielded */
@@ -376,7 +442,12 @@ static ALWAYS_INLINE struct k_thread *next_up(void)
 
 	/* Put _current back into the queue */
 	if (thread != _current && active &&
-		!z_is_idle_thread_object(_current) && !queued) {
+		!z_is_idle_thread_object(_current) && !queued
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+        && !release_current) {
+#else
+        ) {
+#endif
 		queue_thread(_current);
 	}
 
@@ -746,6 +817,16 @@ static void add_to_waitq_locked(struct k_thread *thread, _wait_q_t *wait_q)
 		thread->base.pended_on = wait_q;
 		z_priq_wait_add(&wait_q->waitq, thread);
 	}
+#ifdef CONFIG_SMP_HOTFIX_RELEASE_CURRENT
+	else {
+		/*
+		 * Note: mailbox API will wait on the NULL wait_q, and current thread
+		 * is stored in mailbox strcture and can be used by other CPU using
+		 * mailbox API.
+		 */
+		thread_public_in_smp(thread);
+	}
+#endif /* CONFIG_SMP_HOTFIX_RELEASE_CURRENT */
 }
 
 static void add_thread_timeout(struct k_thread *thread, k_timeout_t timeout)

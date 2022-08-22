@@ -32,6 +32,8 @@
 #define _thread_offset_to_s1 \
 	(___thread_t_callee_saved_OFFSET + ___callee_saved_t_s1_OFFSET)
 
+#ifndef CONFIG_EMBEDDED_ISA
+
 #define _thread_offset_to_s2 \
 	(___thread_t_callee_saved_OFFSET + ___callee_saved_t_s2_OFFSET)
 
@@ -61,6 +63,8 @@
 
 #define _thread_offset_to_s11 \
 	(___thread_t_callee_saved_OFFSET + ___callee_saved_t_s11_OFFSET)
+
+#endif
 
 #define _thread_offset_to_swap_return_value \
 	(___thread_t_arch_OFFSET + ___thread_arch_t_swap_return_value_OFFSET)
@@ -113,6 +117,12 @@
 	(___thread_t_arch_OFFSET + ___thread_arch_t_priv_stack_start_OFFSET)
 #define _thread_offset_to_user_sp \
 	(___thread_t_arch_OFFSET + ___thread_arch_t_user_sp_OFFSET)
+#endif
+
+#if defined(CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE)
+#define _thread_offset_to_callee_state \
+	(___thread_t_callee_saved_OFFSET + ___callee_saved_t_callee_state_OFFSET)
+
 #endif
 
 /* end - threads */

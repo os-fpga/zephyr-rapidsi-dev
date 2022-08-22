@@ -98,6 +98,8 @@ source "drivers/gpio/Kconfig.rpi_pico"
 
 source "drivers/gpio/Kconfig.rv32m1"
 
+source "drivers/gpio/Kconfig.andes_atcgpio100"
+
 source "drivers/gpio/Kconfig.lmp90xxx"
 
 source "drivers/gpio/Kconfig.litex"

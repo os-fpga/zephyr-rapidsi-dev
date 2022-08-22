@@ -6,6 +6,7 @@
  */
 
 #include <zephyr/toolchain.h>
+#include <zephyr/arch/cpu.h>
 
 /* exports */
 GTEXT(__start)

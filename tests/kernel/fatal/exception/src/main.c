@@ -85,6 +85,12 @@ void entry_cpu_exception(void *p1, void *p2, void *p3)
 	 */
 	{
 		volatile long illegal = 0;
+
+		/* Note: self modifying code needs to flush dcache. */
+#if defined(CONFIG_RISCV)
+		__asm__ volatile ("fence.i");
+#endif
+
 		((void(*)(void))&illegal)();
 	}
 #endif

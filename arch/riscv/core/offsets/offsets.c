@@ -32,6 +32,7 @@ GEN_OFFSET_SYM(_callee_saved_t, s0);
 GEN_OFFSET_SYM(_callee_saved_t, s1);
 #if !defined(CONFIG_RISCV_ISA_RV32E)
 GEN_OFFSET_SYM(_callee_saved_t, s2);
+#ifndef CONFIG_EMBEDDED_ISA
 GEN_OFFSET_SYM(_callee_saved_t, s3);
 GEN_OFFSET_SYM(_callee_saved_t, s4);
 GEN_OFFSET_SYM(_callee_saved_t, s5);
@@ -42,6 +43,7 @@ GEN_OFFSET_SYM(_callee_saved_t, s9);
 GEN_OFFSET_SYM(_callee_saved_t, s10);
 GEN_OFFSET_SYM(_callee_saved_t, s11);
 #endif /* !CONFIG_RISCV_ISA_RV32E */
+#endif
 
 #if defined(CONFIG_FPU) && defined(CONFIG_FPU_SHARING)
 GEN_OFFSET_SYM(_callee_saved_t, fcsr);
@@ -57,6 +59,10 @@ GEN_OFFSET_SYM(_callee_saved_t, fs8);
 GEN_OFFSET_SYM(_callee_saved_t, fs9);
 GEN_OFFSET_SYM(_callee_saved_t, fs10);
 GEN_OFFSET_SYM(_callee_saved_t, fs11);
+#endif
+
+#if defined(CONFIG_SMP_HOTFIX_SPIN_ON_RISCV_CALLEE)
+GEN_OFFSET_SYM(_callee_saved_t, callee_state);
 #endif
 
 /* esf member offsets */
@@ -113,6 +119,9 @@ GEN_OFFSET_SYM(z_arch_esf_t, fa7);
 #endif
 
 #if defined(CONFIG_RISCV_SOC_CONTEXT_SAVE)
+#ifdef CONFIG_USE_SWITCH
+GEN_OFFSET_SYM(_thread_t, switch_handle);
+#endif /* CONFIG_USE_SWITCH */
 GEN_OFFSET_SYM(z_arch_esf_t, soc_context);
 #endif
 #if defined(CONFIG_RISCV_SOC_OFFSETS)
