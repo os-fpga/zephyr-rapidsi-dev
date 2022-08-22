@@ -441,7 +441,9 @@ int k_mbox_get(struct k_mbox *mbox, struct k_mbox_msg *rx_msg, void *buffer,
 
 	/* consume message data immediately, if needed */
 	if (result == 0) {
+		key = k_spin_lock(&mbox->lock);
 		result = mbox_message_data_check(rx_msg, buffer);
+		k_spin_unlock(&mbox->lock, key);
 	}
 
 	SYS_PORT_TRACING_OBJ_FUNC_EXIT(k_mbox, get, mbox, timeout, result);

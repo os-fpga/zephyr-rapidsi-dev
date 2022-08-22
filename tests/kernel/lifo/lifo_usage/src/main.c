@@ -19,7 +19,7 @@ static struct k_thread tdata, tdata1;
 static K_THREAD_STACK_DEFINE(tstack, STACK_SIZE);
 static K_THREAD_STACK_DEFINE(tstack1, STACK_SIZE);
 
-static struct k_sem start_sema, wait_sema;
+static struct k_sem start_sema, end_sema, wait_sema;
 void test_thread_pend_and_timeout(void *p1, void *p2, void *p3);
 
 struct scratch_lifo_packet {
@@ -93,6 +93,8 @@ static void thread_entry_nowait(void *p1, void *p2, void *p3)
 {
 	void *ret;
 
+	k_sem_take(&start_sema, K_FOREVER);
+
 	ret = k_lifo_get((struct k_lifo *)p1, K_FOREVER);
 
 	/* data pushed at last should be read first */
@@ -102,7 +104,7 @@ static void thread_entry_nowait(void *p1, void *p2, void *p3)
 
 	zassert_equal(ret, (void *)&data[0], NULL);
 
-	k_sem_give(&start_sema);
+	k_sem_give(&end_sema);
 }
 
 static bool is_timeout_in_range(uint32_t start_time, uint32_t timeout)
@@ -211,6 +213,7 @@ ZTEST(lifo_usage, test_lifo_nowait)
 	k_lifo_init(&lifo);
 
 	k_sem_init(&start_sema, 0, 1);
+	k_sem_init(&end_sema, 0, 1);
 
 	/* put some data on lifo */
 	k_lifo_put(&lifo, (void *)&data[0]);
@@ -222,7 +225,10 @@ ZTEST(lifo_usage, test_lifo_nowait)
 	k_lifo_put(&lifo, (void *)&data[1]);
 
 	/* Allow another thread to read lifo */
-	k_sem_take(&start_sema, K_FOREVER);
+	k_sem_give(&start_sema);
+
+	/* Wait another thread to finish reading */
+	k_sem_take(&end_sema, K_FOREVER);
 	k_thread_abort(tid);
 }
 

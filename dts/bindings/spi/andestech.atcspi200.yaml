@@ -1,0 +1,21 @@
+#
+# Copyright (c) 2019, Andes Technology Corporation.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+description:
+    This binding gives a representation of Andes ATCSPI200 SPI controller
+
+compatible: "andestech,atcspi200"
+
+include: spi-controller.yaml
+
+properties:
+
+    reg:
+      required: true
+
+    num-cs:
+      type: int
+      required: false

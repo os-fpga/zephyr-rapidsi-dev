@@ -372,6 +372,7 @@ is_user_syscall:
 	li t1, K_SYSCALL_LIMIT
 	bltu t0, t1, valid_syscall_id
 
+#ifndef CONFIG_EMBEDDED_ISA
 	/* bad syscall id.  Set arg1 to bad id and set call_id to SYSCALL_BAD */
 	mv a0, t0
 	li t0, K_SYSCALL_BAD
@@ -382,6 +383,7 @@ valid_syscall_id:
 
 	slli t1, t0, RV_REGSHIFT	# Determine offset from indice value
 	add t2, t2, t1			# Table addr + offset = function addr
+#endif
 	lr t2, 0(t2)			# Load function address
 
 	/* Execute syscall function */

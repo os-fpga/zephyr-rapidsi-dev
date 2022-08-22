@@ -834,6 +834,8 @@ menu "SMP Options"
 config SMP
 	bool "Symmetric multiprocessing support"
 	depends on USE_SWITCH
+	select SMP_HOTFIX_RELEASE_CURRENT
+	select SMP_HOTFIX_SPIN_ON_RISCV_CALLEE
 	help
 	  When true, kernel will be built with SMP support, allowing
 	  more than one CPU to schedule Zephyr tasks at a time.
@@ -910,6 +912,28 @@ config KERNEL_COHERENCE
 	  may fail strangely.  Some assertions exist to catch these
 	  mistakes, but not all circumstances can be tested.
 
+config SMP_HOTFIX_RELEASE_CURRENT
+	bool
+	help
+	  In SMP, If a CPU move it's current thread to global
+	  ready_q/wait_q, this thread is public to other CPUs and
+	  can be scheduled by them. To avoid multiple CPUs scheduling
+	  to same thread, force CPU release current thread if making
+	  it public and CPU should find next thread from global
+	  ready_q/wait_q.
+
+config SMP_HOTFIX_SPIN_ON_RISCV_CALLEE
+	bool
+	help
+	  There is an unavoidable SMP race when threads swap.
+	  (see wait_for_switch() comments). When a CPU get it's next
+	  thread, this thread context may not completely be saved by
+	  previous CPU running this thread.
+
+	  To avoid the race condition, CPU will spin on restoring
+	  callee registers until these registers are saved by
+	  previous CPU. This hotfix is only implemented on RISC-V
+	  architecture.
 endmenu
 
 config TICKLESS_KERNEL

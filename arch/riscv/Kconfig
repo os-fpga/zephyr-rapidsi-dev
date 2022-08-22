@@ -9,6 +9,10 @@ config ARCH
 	default "riscv64" if 64BIT
 	default "riscv32"
 
+config EMBEDDED_ISA
+	bool "Use RV32 Embedded ISA, a reduced version of RV32I with only 16 registers"
+	depends on !64BIT
+
 config FLOAT_HARD
 	bool "Hard-float calling convention"
 	default y

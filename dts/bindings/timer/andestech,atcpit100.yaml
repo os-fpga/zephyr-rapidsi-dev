@@ -1,0 +1,28 @@
+#
+# Copyright (c) 2019, Andes Technology Corporation.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+description:
+    This is a representation of the Andes Technology atcpit100 PIT nodes
+
+compatible: "andestech,atcpit100"
+
+include: base.yaml
+
+properties:
+
+    reg:
+      required: true
+
+    label:
+      required: true
+
+    interrupts:
+      required: true
+
+    clock-frequency:
+      type: int
+      description: channel clock source
+      required: true
