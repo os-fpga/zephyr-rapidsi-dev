@@ -2,7 +2,5 @@
 # SPDX-License-Identifier: Apache-2.0
 
 config BOARD
-	default "adp_xc7k_ae250" if BOARD_ADP_XC7K_AE250
 	default "adp_xc7k_ae350" if BOARD_ADP_XC7K_AE350
-	default "adp_corvette_f1" if BOARD_ADP_CORVETTE_F1
 	default "vcu118_ae350" if BOARD_VCU118_AE350

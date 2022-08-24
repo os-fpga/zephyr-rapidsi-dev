@@ -1,17 +1,9 @@
 # Copyright (c) 2021 Andes Technology Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-config BOARD_ADP_XC7K_AE250
-	bool "Andes ADP-XC7K AE250 Platform"
-	depends on SOC_RISCV_ANDES_AE250
-
 config BOARD_ADP_XC7K_AE350
 	bool "Andes ADP-XC7K AE350 Platform"
 	depends on SOC_RISCV_ANDES_AE350
-
-config BOARD_ADP_CORVETTE_F1
-	bool "Andes ADP-Corvette-F1 Platform"
-	depends on SOC_RISCV_ANDES_AE250
 
 config BOARD_VCU118_AE350
 	bool "Andes VCU118 AE350 Platform"
