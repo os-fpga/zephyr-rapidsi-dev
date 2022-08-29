@@ -5,7 +5,3 @@ config BOARD_ADP_XC7K_AE350
 	bool "Andes ADP-XC7K AE350 Platform"
 	depends on SOC_RISCV_ANDES_AE350
 
-config BOARD_VCU118_AE350
-	bool "Andes VCU118 AE350 Platform"
-	depends on SOC_RISCV_ANDES_AE350
-
