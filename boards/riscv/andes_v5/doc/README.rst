@@ -9,9 +9,6 @@ orca----|
 	|
 	|-- Kconfig.board
 	|-- Kconfig.defconfig
-	|-- orca_ae250_defconfig
-	|-- orca_ae250.dts
-	|-- orca_ae250.yaml
 	|-- orca_ae350_defconfig
 	|-- orca_ae350.dts
 	|-- orca_ae350.yaml
