@@ -4,13 +4,11 @@ type: mcu
 arch: riscv32
 toolchain:
   - cross-compile
-ram: 512
+ram: 2GB
 supported:
-  - netif:eth
   - gpio
   - counter
   - spi
-  - i2c
 testing:
   ignore_tags:
     - bluetooth
