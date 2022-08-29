@@ -3,4 +3,3 @@
 
 config BOARD
 	default "adp_xc7k_ae350" if BOARD_ADP_XC7K_AE350
-	default "vcu118_ae350" if BOARD_VCU118_AE350
