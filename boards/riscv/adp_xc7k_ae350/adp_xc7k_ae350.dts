@@ -132,7 +132,7 @@
 
 &uart1 {
 	status = "okay";
-	clock-frequency = <19660800>;
+	clock-frequency = <13333333>;
 	current-speed = <115200>;
 };
 
