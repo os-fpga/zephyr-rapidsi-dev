@@ -145,7 +145,7 @@
 	flash0: flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		size = <16777216>;
+		size = <8388608>;
 		spi-max-frequency = <1000000>;
 		jedec-id = [c2 25 35];
 		status = "okay";
