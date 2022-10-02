@@ -53,9 +53,9 @@
 			#address-cells = <1>;
 			#interrupt-cells = <2>;
 			interrupt-controller;
-			reg = <	0xe4000000 0x00001000
+			reg = <0xe4000000 0x00001000
 				0xe4002000 0x00000800
-				0xe4200000 0x00010000 >;
+				0xe4200000 0x00010000>;
 			reg-names = "prio", "irq_en", "reg";
 			riscv,max-priority = <255>;
 			riscv,ndev = <1023>;
