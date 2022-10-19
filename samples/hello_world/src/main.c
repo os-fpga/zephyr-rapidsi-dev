@@ -8,5 +8,5 @@
 
 void main(void)
 {
-	printk("Hello World! %s\n", CONFIG_BOARD);
+	printk("\n\n\nHello World! \n\r");
 }

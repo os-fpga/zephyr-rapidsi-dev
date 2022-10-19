@@ -16,7 +16,6 @@
 #define ZEPHYR_ARCH_RISCV_INCLUDE_KERNEL_ARCH_FUNC_H_
 
 #include <kernel_arch_data.h>
-#include <zephyr/kernel_structs.h>
 #include <pmp.h>
 
 #ifdef __cplusplus

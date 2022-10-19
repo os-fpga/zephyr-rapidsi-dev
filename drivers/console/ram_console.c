@@ -19,7 +19,7 @@ extern void __stdout_hook_install(int (*fn)(int));
 char ram_console[CONFIG_RAM_CONSOLE_BUFFER_SIZE + 1];
 static int pos;
 
-static int ram_console_out(int character)
+int ram_console_out(int character)
 {
 	ram_console[pos] = (char)character;
 	pos = (pos + 1) % CONFIG_RAM_CONSOLE_BUFFER_SIZE;

@@ -81,9 +81,9 @@ aa_loop:
 	 * Initially, setup stack pointer to
 	 * z_interrupt_stacks + CONFIG_ISR_STACK_SIZE
 	 */
-	la a0, z_interrupt_stacks
+	la sp, z_interrupt_stacks
 	li t0, CONFIG_ISR_STACK_SIZE
-	add sp, a0, t0
+	add sp, sp, t0
 
 #ifdef CONFIG_WDOG_INIT
 	call _WdogInit

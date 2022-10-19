@@ -13,7 +13,6 @@ zephyr_library_sources(
   switch.S
   smp.c
   thread.c
-  riscv-mp.c
 )
 
 zephyr_library_sources_ifdef(CONFIG_DEBUG_COREDUMP coredump.c)

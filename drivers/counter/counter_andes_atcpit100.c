@@ -71,6 +71,8 @@
 #define TOP_CHANNEL         CH_NUM_PER_COUNTER
 #define TOP_VALUE_MAX       UINT32_MAX
 
+#error "Not using this code in QEMU RiSCv32"
+
 typedef void (*atcpit100_cfg_func_t)(void);
 
 struct counter_atcpit100_device_config {

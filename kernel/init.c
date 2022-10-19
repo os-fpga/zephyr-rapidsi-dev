@@ -36,6 +36,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(os, CONFIG_KERNEL_LOG_LEVEL);
 
+extern int ram_console_out(int character);
 /* the only struct z_kernel instance */
 struct z_kernel _kernel;
 
@@ -415,10 +416,12 @@ sys_rand_fallback:
 __boot_func
 FUNC_NORETURN void z_cstart(void)
 {
+    ram_console_out('G');
 	/* gcov hook needed to get the coverage report.*/
 	gcov_static_init();
 
 	/* perform any architecture-specific initialization */
+    ram_console_out('A');
 	arch_kernel_init();
 
 	LOG_CORE_INIT();
@@ -429,6 +432,7 @@ FUNC_NORETURN void z_cstart(void)
 	 */
 	struct k_thread dummy_thread;
 
+    ram_console_out('D');
 	z_dummy_thread_init(&dummy_thread);
 #endif
 	/* do any necessary initialization of static devices */
@@ -451,6 +455,8 @@ FUNC_NORETURN void z_cstart(void)
 	timing_start();
 #endif
 
+    ram_console_out('M');
+    printk("Running MAIN Thread multithreading\n");
 #ifdef CONFIG_MULTITHREADING
 	switch_to_main_thread(prepare_multithreading());
 #else
@@ -463,6 +469,7 @@ FUNC_NORETURN void z_cstart(void)
 #else
 	bg_thread_main(NULL, NULL, NULL);
 
+    printk(" Just started bg_thread_main!\n");
 	/* LCOV_EXCL_START
 	 * We've already dumped coverage data at this point.
 	 */

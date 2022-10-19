@@ -54,6 +54,7 @@ config CACHE_ENABLE
 
 config SOC_ANDES_V5_HWDSP
 	bool "AndeStar V5 DSP ISA"
+	default n
 	select RISCV_SOC_CONTEXT_SAVE
 	depends on !RISCV_GENERIC_TOOLCHAIN
 	help
@@ -62,7 +63,7 @@ config SOC_ANDES_V5_HWDSP
 
 config SOC_ANDES_V5_PFT
 	bool "Andes V5 PowerBrake extension"
-	default y
+	default n
 	select RISCV_SOC_CONTEXT_SAVE
 	help
 		The PowerBrake extension throttles performance by reducing instruction

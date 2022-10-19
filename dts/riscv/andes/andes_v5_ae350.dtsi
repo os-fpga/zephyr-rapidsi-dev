@@ -1,202 +1,201 @@
 /*
- * Copyright (c) 2021 Andes Technology Corporation
+ * Copyright (c) 2020 Cobham Gaisler AB
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/*
+ * This file is based on:
+ *   qemu-system-riscv32 -machine virt,dumpdtb=virt.dtb -smp 8 -m 256
+ *   dtc virt.dtb > virt.dtsi
+ */
+
 /dts-v1/;
-#include <dt-bindings/gpio/gpio.h>
-#include <mem.h>
 
 / {
-	#address-cells = <1>;
-	#size-cells = <1>;
+	#address-cells = < 0x01 >;
+	#size-cells = < 0x01 >;
+	compatible = "riscv-virtio";
+	model = "riscv-virtio,qemu";
+
+	flash0: flash@20000000 {
+		bank-width = < 0x04 >;
+		reg = < 0x20000000 0x2000000 0x22000000 0x2000000 >;
+		compatible = "cfi-flash";
+	};
+
+	uart0: uart@10000000 {
+		interrupts = < 0x4 1 >;
+		interrupt-parent = < &plic >;
+		clock-frequency = < 0x384000 >;
+		reg = < 0x10000000 0x100 >;
+		compatible = "ns16550";
+		reg-shift = < 0 >;
+	};
 
 	cpus {
-		#address-cells = <1>;
-		#size-cells = <0>;
-		/* See Gemini Architecture doc section 3.2 */
-		timebase-frequency = <53300000>;
-		CPU0: cpu@0 {
-			compatible = "riscv";
+		#address-cells = < 0x01 >;
+		#size-cells = < 0x00 >;
+		timebase-frequency = < 10000000 >;
+
+		cpu@0 {
 			device_type = "cpu";
-			reg = <0>;
+			reg = < 0x00 >;
 			status = "okay";
-			riscv,isa = "rv32imafdcxandes";
-			mmu-type = "riscv,sv32";
-			clock-frequency = <53300000>;
-			i-cache-line-size = <32>;
-			d-cache-line-size = <32>;
-			CPU0_intc: interrupt-controller {
-				#address-cells = <0>;
-				#interrupt-cells = <1>;
-				interrupt-controller;
+			compatible = "riscv";
+
+			hlic0: interrupt-controller {
 				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@1 {
+			device_type = "cpu";
+			reg = < 0x01 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic1: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@2 {
+			device_type = "cpu";
+			reg = < 0x02 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic2: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@3 {
+			device_type = "cpu";
+			reg = < 0x03 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic3: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@4 {
+			device_type = "cpu";
+			reg = < 0x04 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic4: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@5 {
+			device_type = "cpu";
+			reg = < 0x05 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic5: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@6 {
+			device_type = "cpu";
+			reg = < 0x06 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic6: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
+			};
+		};
+
+		cpu@7 {
+			device_type = "cpu";
+			reg = < 0x07 >;
+			status = "okay";
+			compatible = "riscv";
+
+			hlic7: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <0>;
+				#interrupt-cells = < 0x01 >;
+				interrupt-controller;
 			};
 		};
 	};
 
-	dram: memory@0 {
+	ram0: memory@80000000 {
 		device_type = "memory";
-		compatible = "mmio-sram";
-		reg = <0x00000000 0x7fffffff>; /* 2GB DDR */
+		reg = < 0x80000000 0x10000000 >;
 	};
 
 	soc {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "andestech,ae350";
+		#address-cells = < 0x01 >;
+		#size-cells = < 0x01 >;
+		compatible = "simple-bus";
 		ranges;
 
-		plic0: interrupt-controller@e4000000 {
-			compatible = "sifive,plic-1.0.0";
-			#address-cells = <1>;
-			#interrupt-cells = <2>;
-			interrupt-controller;
-			reg = <0xe4000000 0x00001000
-				0xe4002000 0x00000800
-				0xe4200000 0x00010000>;
+		plic: interrupt-controller@c000000 {
+			riscv,max-priority = <7>;
+			riscv,ndev = < 0x35 >;
+			reg = <0x0c000000 0x00002000
+			       0x0c002000 0x001fe000
+			       0x0c200000 0x03e00000>;
 			reg-names = "prio", "irq_en", "reg";
-			riscv,max-priority = <255>;
-			riscv,ndev = <1023>;
-			interrupts-extended = <&CPU0_intc 11>;
-		};
-
-		plic_sw0: interrupt-controller@e6400000 {
-			compatible = "andestech,plic_sw";
-			#address-cells = <1>;
-			#interrupt-cells = <2>;
+			interrupts-extended = <
+				&hlic0 0x0b &hlic0 0x09
+				&hlic1 0x0b &hlic1 0x09
+				&hlic2 0x0b &hlic2 0x09
+				&hlic3 0x0b &hlic3 0x09
+				&hlic4 0x0b &hlic4 0x09
+				&hlic5 0x0b &hlic5 0x09
+				&hlic6 0x0b &hlic6 0x09
+				&hlic7 0x0b &hlic7 0x09
+			>;
 			interrupt-controller;
-			reg = <0xe6400000 0x00400000>;
-			riscv,max-priority = <255>;
-			riscv,ndev = <1023>;
-			interrupts-extended = <&CPU0_intc 3>;
+			compatible = "sifive,plic-1.0.0";
+			#address-cells = < 0x00 >;
+			#interrupt-cells = < 0x02 >;
 		};
 
-		smu: smu@f0100000 {
-			compatible = "andestech,atcsmu100";
-			reg = <0xf0100000 0x1000>;
-			status = "disabled";
-		};
-
-		l2_cache: cache-controller@e0500000 {
-			compatible = "andestech,l2c";
-			reg = <0xe0500000 0x1000>;
-			cache-unified;
-			status = "disabled";
-		};
-
-		uart0: serial@f1010000 {
-			compatible = "ns16550";
-			label = "uart_0";
-			reg = <0xf1010000 0x1000>;
-			reg-shift = <2>;
-			interrupts = <4 1>;
-			interrupt-parent = <&plic0>;
-			status = "disabled";
-		};
-
-		uart1: serial@f1020000 {
-			compatible = "ns16550";
-			label = "uart_1";
-			reg = <0xf1020000 0x1000>;
-			reg-shift = <2>;
-			interrupts = <5 1>;
-			interrupt-parent = <&plic0>;
-			status = "disabled";
-		};
-
-		pit0: pit@f0400000 {
-			compatible = "andestech,atcpit100";
-			label = "pit_0";
-			reg = <0xf0400000 0x1000>;
-			interrupts = <3 1>;
-			interrupt-parent = <&plic0>;
-			clock-frequency = <60000000>;
-			status = "disabled";
-		};
-
-		rtc0: rtc@f0600000 {
-			compatible = "andestech,atcrtc100";
-			reg = <0xf0600000 0x1000>;
-			interrupts = <1 1>, <2 1>;
-			interrupt-parent = <&plic0>;
-			wakeup-source;
-			status = "disabled";
-		};
-
-		gpio0: gpio@f0700000 {
-			compatible = "andestech,atcgpio100";
-			label = "gpio_0";
-			reg = <0xf0700000 0x1000>;
-			interrupts = <7 1>;
-			interrupt-parent = <&plic0>;
-			gpio-controller;
-			ngpios = <32>;
-			#gpio-cells = <2>;
-			status = "disabled";
-		};
-
-		i2c0: i2c@f0a00000 {
-			compatible = "andestech,atciic100";
-			label = "i2c_0";
-			reg = <0xf0a00000 0x1000>;
-			interrupts = <6 1>;
-			interrupt-parent = <&plic0>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		spi0: spi@f0b00000 {
-			compatible = "andestech,atcspi200";
-			label = "SPI_0";
-			reg = <0xf0b00000 0x1000
-			       0x80000000 DT_SIZE_K(1024)>;
-			reg-names = "control", "mem";
-			interrupts = <4 1>;
-			interrupt-parent = <&plic0>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			num-cs = <1>;
-			clock-frequency = <66000000>;
-			status = "disabled";
-		};
-
-		spi1: spi@f0f00000 {
-			compatible = "andestech,atcspi200";
-			label = "spi_1";
-			reg = <0xf0f00000 0x1000>;
-			reg-names = "control";
-			interrupts = <5 1>;
-			interrupt-parent = <&plic0>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			num-cs = <1>;
-			clock-frequency = <66000000>;
-			status = "disabled";
-		};
-
-		dma0: dma@f0c00000 {
-			compatible = "andestech,atcdmac300";
-			reg = <0xf0c00000 0x1000>;
-			interrupts = <10 1>;
-			interrupt-parent = <&plic0>;
-			dma-channels = <8>;
-		};
-
-
-
-		mmc0: mmc@f0e00000 {
-			compatible = "andestech,atfsdc010";
-			reg = <0xf0e00000 0x1000>;
-			interrupts = <18 1>;
-			interrupt-parent = <&plic0>;
-			cap-sd-highspeed;
-			max-frequency = <100000000>;
-			clock-freq-min-max = <400000 100000000>;
-			fifo-depth = <0x10>;
-			status = "disabled";
+		clint@2000000 {
+			compatible = "sifive,clint0";
+			reg = <0x2000000 0x10000>;
+			interrupts-extended = <&hlic0 0x03 &hlic0 0x07
+					       &hlic1 0x03 &hlic1 0x07
+					       &hlic2 0x03 &hlic2 0x07
+					       &hlic3 0x03 &hlic3 0x07
+					       &hlic4 0x03 &hlic4 0x07
+					       &hlic5 0x03 &hlic5 0x07
+					       &hlic6 0x03 &hlic6 0x07
+					       &hlic7 0x03 &hlic7 0x07>;
 		};
 	};
 };
