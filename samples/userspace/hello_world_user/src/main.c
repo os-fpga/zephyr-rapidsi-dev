@@ -7,6 +7,8 @@
 #include <zephyr/zephyr.h>
 #include <stdio.h>
 #define USER_STACKSIZE	2048
+#undef CONFIG_ARCH
+#define CONFIG_ARCH " Rapid Silicon QEMU Gemini"
 
 struct k_thread user_thread;
 K_THREAD_STACK_DEFINE(user_stack, USER_STACKSIZE);
