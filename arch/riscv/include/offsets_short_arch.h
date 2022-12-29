@@ -115,6 +115,7 @@
 	(___thread_t_arch_OFFSET + ___thread_arch_t_user_sp_OFFSET)
 #endif
 
+
 /* end - threads */
 
 #endif /* ZEPHYR_ARCH_RISCV_INCLUDE_OFFSETS_SHORT_ARCH_H_ */

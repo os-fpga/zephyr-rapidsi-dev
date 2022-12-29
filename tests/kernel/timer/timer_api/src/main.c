@@ -5,7 +5,7 @@
  */
 
 #include <stdlib.h>
-#include <ztest.h>
+#include <zephyr/ztest.h>
 #include <zephyr/types.h>
 
 struct timer_data {
@@ -19,6 +19,8 @@ struct timer_data {
 #define EXPIRE_TIMES 4
 #define WITHIN_ERROR(var, target, epsilon) (llabs((int64_t) ((target) - (var))) <= (epsilon))
 
+/* One tick tolerance for timer */
+#define TICK_TOLERANCE (1000 / CONFIG_SYS_CLOCK_TICKS_PER_SEC)
 /* ms can be converted precisely to ticks only when a ms is exactly
  * represented by an integral number of ticks.  If the conversion is
  * not precise, then the reverse conversion of a difference in ms can

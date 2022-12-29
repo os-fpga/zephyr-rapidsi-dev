@@ -253,7 +253,6 @@ static void write_pmp_entries(unsigned int start, unsigned int end,
 
 	print_pmp_entries(start, end, pmp_addr, pmp_cfg, "register write");
 
-#ifdef CONFIG_QEMU_TARGET
 	/*
 	 * A QEMU bug may create bad transient PMP representations causing
 	 * false access faults to be reported. Work around it by setting
@@ -266,7 +265,6 @@ static void write_pmp_entries(unsigned int start, unsigned int end,
 
 	z_riscv_write_pmp_entries(start, CONFIG_PMP_SLOTS, false,
 				  pmp_zero, pmp_zero);
-#endif
 
 	z_riscv_write_pmp_entries(start, end, clear_trailing_entries,
 				  pmp_addr, pmp_cfg);
@@ -334,7 +332,7 @@ void z_riscv_pmp_init(void)
 	if (global_pmp_end_index != 0) {
 		__ASSERT(global_pmp_end_index == index, "");
 		__ASSERT(global_pmp_cfg[0] == pmp_cfg[0], "");
-		__ASSERT(global_pmp_last_addr == pmp_addr[index - 1]);
+		__ASSERT(global_pmp_last_addr == pmp_addr[index - 1], "");
 	}
 #endif
 
@@ -402,7 +400,6 @@ void z_riscv_pmp_stackguard_prepare(struct k_thread *thread)
 	 */
 	set_pmp_entry(&index, PMP_R | PMP_W | PMP_X,
 		      0, 0, PMP_M_MODE(thread));
-#ifdef CONFIG_QEMU_TARGET
 	/*
 	 * Workaround: The above produced 0x1fffffff which is correct.
 	 * But there is a QEMU bug that prevents it from interpreting this
@@ -411,7 +408,6 @@ void z_riscv_pmp_stackguard_prepare(struct k_thread *thread)
 	 * https://lists.gnu.org/archive/html/qemu-devel/2022-04/msg00961.html
 	 */
 	thread->arch.m_mode_pmpaddr_regs[index-1] = -1L;
-#endif
 
 	/* remember how many entries we use */
 	thread->arch.m_mode_pmp_end_index = index;

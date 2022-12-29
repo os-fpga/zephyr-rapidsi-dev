@@ -77,6 +77,8 @@ source "drivers/spi/Kconfig.nrfx"
 
 source "drivers/spi/Kconfig.cc13xx_cc26xx"
 
+source "drivers/spi/Kconfig.andes_atcspi200"
+
 source "drivers/spi/Kconfig.litex"
 
 source "drivers/spi/Kconfig.oc_simple"

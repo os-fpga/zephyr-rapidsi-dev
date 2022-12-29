@@ -6,6 +6,7 @@
  */
 
 #include <zephyr/toolchain.h>
+#include <zephyr/arch/cpu.h>
 
 /* exports */
 GTEXT(__start)
@@ -15,13 +16,11 @@ GTEXT(__initialize)
 GTEXT(_isr_wrapper)
 
 SECTION_FUNC(vectors, __start)
-#if defined(CONFIG_RISCV_GP)
 	/* Initialize global pointer */
 	.option push
 	.option norelax
 	la gp, __global_pointer$
 	.option pop
-#endif
 
 	.option norvc;
 

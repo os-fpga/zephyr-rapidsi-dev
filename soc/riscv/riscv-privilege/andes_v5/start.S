@@ -21,7 +21,7 @@ SECTION_FUNC(init, entry)
 	csrw uitb, t0
 #endif
 
-#ifdef CONFIG_CACHE_ENABLE
+#if 0
 	/*
 	 * Enable I/D cache with HW prefetcher,
 	 * D-cache write-around (threshold: 4 cache lines),
@@ -49,9 +49,10 @@ cache_enable_finish:
 #endif
 
 	/* Enable misaligned access and non-blocking load */
+#if 0
 	li t0, (1 << 8) | (1 << 6)
 	csrs NDS_MMISC_CTL, t0
-
+#endif
 	j __start
 
 	.option pop

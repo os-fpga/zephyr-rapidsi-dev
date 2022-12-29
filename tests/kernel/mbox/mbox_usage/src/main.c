@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <ztest.h>
+#include <zephyr/ztest.h>
 #include <zephyr/kernel.h>
 
 #define STACK_SIZE (512 + CONFIG_TEST_EXTRA_STACK_SIZE)
@@ -101,11 +101,21 @@ void test_msg_receiver(void)
 	info_type = PUT_GET_NULL;
 	msg_receiver(&mbox, K_ANY, K_NO_WAIT);
 
+	/*
+	 * Note: protection in SMP environment.
+	 *
+	 * This test assume that calling k_mbox_get() is earlier than calling
+	 * k_mbox_put(). and calling k_mbox_put() is earlier than k_mbox_get()
+	 * timeout.
+	 *
+	 * In SMP, 2 threads run at the same time, so add 20 ms delay before
+	 * calling k_mbox_put() and add 50 ms timeout to k_mbox_get().
+	 */
 	tid = k_thread_create(&tdata, tstack, STACK_SIZE,
 			      test_send, &mbox, NULL, NULL,
-			      K_PRIO_PREEMPT(0), 0, K_NO_WAIT);
+			      K_PRIO_PREEMPT(0), 0, K_MSEC(20));
 
-	msg_receiver(&mbox, K_ANY, K_MSEC(2));
+	msg_receiver(&mbox, K_ANY, K_MSEC(50));
 	k_thread_abort(tid);
 }
 

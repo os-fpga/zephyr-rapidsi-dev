@@ -309,6 +309,7 @@ static inline bool is_aborting(struct k_thread *thread)
 }
 #endif
 
+
 static ALWAYS_INLINE struct k_thread *next_up(void)
 {
 	struct k_thread *thread = runq_best();
@@ -356,6 +357,7 @@ static ALWAYS_INLINE struct k_thread *next_up(void)
 
 	bool queued = z_is_thread_queued(_current);
 	bool active = !z_is_thread_prevented_from_running(_current);
+
 
 	if (thread == NULL) {
 		thread = _current_cpu->idle_thread;

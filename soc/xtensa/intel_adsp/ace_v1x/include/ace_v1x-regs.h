@@ -43,6 +43,9 @@ struct dfdspbrcp {
 #define DFDSPBRCP_BATTR_LPSCTL_L1_MIN_WAY		BIT(15)
 #define DFDSPBRCP_BATTR_LPSCTL_BATTR_SLAVE_CORE	BIT(16)
 
+#define DFDSPBRCP_WDT_RESUME		BIT(8)
+#define DFDSPBRCP_WDT_RESTART_COMMAND	0x76
+
 #define DFDSPBRCP (*(volatile struct dfdspbrcp *)DFDSPBRCP_REG)
 
 /* Low priority interrupt indices */
@@ -158,6 +161,41 @@ struct ace_intc {
 #define ACE_INTC ((volatile struct ace_intc *)DT_REG_ADDR(DT_NODELABEL(ace_intc)))
 
 #define ACE_INTC_IRQ DT_IRQN(DT_NODELABEL(ace_intc))
+
+/* Power control */
+#define PWRCTL_REG 0x71b90
+
+struct ace_pwrctl {
+	uint16_t wpdsphpxpg : 3;
+	uint16_t rsvd3      : 1;
+	uint16_t wphstpg    : 1;
+	uint16_t rsvd5      : 1;
+	uint16_t wphubhppg  : 1;
+	uint16_t wpdspulppg : 1;
+	uint16_t wpioxpg    : 2;
+	uint16_t rsvd11     : 2;
+	uint16_t wpmlpg     : 1;
+	uint16_t rsvd14     : 2;
+	uint16_t phubulppg  : 1;
+};
+
+#define ACE_PWRCTL ((volatile struct ace_pwrctl *)PWRCTL_REG)
+
+#define PWRSTS_REG 0x71b92
+
+struct ace_pwrsts {
+	uint16_t dsphpxpgs : 4;
+	uint16_t hstpgs    : 1;
+	uint16_t rsvd5     : 1;
+	uint16_t hubhppgs  : 1;
+	uint16_t dspulppgs : 1;
+	uint16_t ioxpgs    : 4;
+	uint16_t mlpgs     : 2;
+	uint16_t rsvd14    : 1;
+	uint16_t hubulppgs : 1;
+};
+
+#define ACE_PWRSTS ((volatile struct ace_pwrsts *)PWRSTS_REG)
 
 /* L2 Local Memory Management */
 

@@ -17,7 +17,7 @@
  */
 #define __DEPRECATED_MACRO
 
-#include <ztest.h>
+#include <zephyr/ztest.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
@@ -1216,6 +1216,24 @@ ZTEST(devicetree_api, test_arrays)
 	zassert_true(!strcmp(DT_PROP_BY_IDX(TEST_ARRAYS, c, 1), c[1]), "");
 
 	zassert_equal(DT_PROP_LEN(TEST_ARRAYS, c), 2, "");
+}
+
+ZTEST(devicetree_api, test_foreach)
+{
+	/*
+	 * We don't know what plaform we are running on, so settle for
+	 * some basic checks related to nodes we know are in our overlay.
+	 */
+#define IS_ALIASES(node_id) + DT_SAME_NODE(DT_PATH(aliases), node_id)
+#define IS_DISABLED_GPIO(node_id) + DT_SAME_NODE(DT_NODELABEL(disabled_gpio), \
+						node_id)
+	zassert_equal(1, DT_FOREACH_NODE(IS_ALIASES), "");
+	zassert_equal(1, DT_FOREACH_NODE(IS_DISABLED_GPIO), "");
+	zassert_equal(1, DT_FOREACH_STATUS_OKAY_NODE(IS_ALIASES), "");
+	zassert_equal(0, DT_FOREACH_STATUS_OKAY_NODE(IS_DISABLED_GPIO), "");
+
+#undef IS_ALIASES
+#undef IS_DISABLED_GPIO
 }
 
 #undef DT_DRV_COMPAT

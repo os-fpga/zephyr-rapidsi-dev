@@ -1,0 +1,8 @@
+tests:
+  drivers.i2c_slave_simulate_eeprom:
+    depends_on: i2c
+    tags: drivers i2c
+    harness: ztest
+    harness_config:
+      fixture: i2c_bus_short
+    platform_allow: adp_xc7k_ae250 adp_xc7k_ae350 vcu118_ae350 adp_corvette_f1

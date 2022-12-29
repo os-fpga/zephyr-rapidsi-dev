@@ -5,8 +5,10 @@
  */
 
 #include <zephyr/zephyr.h>
+#undef CONFIG_ARCH
+#define CONFIG_ARCH " Rapid Silicon QEMU Gemini"
 
 void main(void)
 {
-	printk("Hello World! %s\n", CONFIG_BOARD);
+	printk("Hello World! %s\n", CONFIG_ARCH);
 }

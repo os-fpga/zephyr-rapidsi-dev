@@ -16,24 +16,6 @@ config SOC
 config NUM_IRQS
 	default 65
 
-config ADC_MCUX_ADC16
-	default y
-	depends on ADC
-
-if CLOCK_CONTROL
-
-config CLOCK_CONTROL_MCUX_SIM
-	default y
-
-config CLOCK_CONTROL_MCUX_MCG
-	default y
-
-endif # CLOCK_CONTROL
-
-config I2C_MCUX
-	default y
-	depends on I2C
-
 config SPI
 	default y
 
@@ -48,9 +30,5 @@ config SOC_FLASH_MCUX
 config USB_KINETIS
 	default y
 	depends on USB_DEVICE_DRIVER
-
-config WDT_MCUX_WDOG
-	default y
-	depends on WATCHDOG
 
 endif # SOC_MKW2xD512

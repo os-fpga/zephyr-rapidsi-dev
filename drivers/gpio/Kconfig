@@ -98,6 +98,8 @@ source "drivers/gpio/Kconfig.rpi_pico"
 
 source "drivers/gpio/Kconfig.rv32m1"
 
+source "drivers/gpio/Kconfig.andes_atcgpio100"
+
 source "drivers/gpio/Kconfig.lmp90xxx"
 
 source "drivers/gpio/Kconfig.litex"
@@ -141,5 +143,9 @@ source "drivers/gpio/Kconfig.gd32"
 source "drivers/gpio/Kconfig.xlnx_ps"
 
 source "drivers/gpio/Kconfig.sn74hc595"
+
+source "drivers/gpio/Kconfig.mchp_mss"
+
+source "drivers/gpio/Kconfig.xmc4xxx"
 
 endif # GPIO

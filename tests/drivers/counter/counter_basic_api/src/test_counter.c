@@ -5,10 +5,17 @@
  */
 
 #include <zephyr/drivers/counter.h>
-#include <ztest.h>
+#include <zephyr/ztest.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(test);
+
+#define HOTFIX_THREAD_USE_FPU \
+	(defined(CONFIG_RISCV) && defined(CONFIG_FPU_SHARING))
+
+#if HOTFIX_THREAD_USE_FPU
+int arch_float_enable(struct k_thread *thread);
+#endif
 
 static struct k_sem top_cnt_sem;
 static volatile uint32_t top_cnt;
@@ -60,6 +67,9 @@ static const struct device *devices[] = {
 #undef DT_DRV_COMPAT
 #undef STM32_COUNTER_DEV
 #endif
+#endif
+#ifdef CONFIG_COUNTER_ANDES_ATCPIT100
+	DT_LABEL(DT_NODELABEL(pit0)),
 #ifdef CONFIG_COUNTER_NATIVE_POSIX
 	DEVICE_DT_GET(DT_NODELABEL(counter0)),
 #endif
@@ -454,12 +464,18 @@ static bool single_channel_alarm_and_custom_top_capable(const struct device *dev
 
 void test_single_shot_alarm_notop(void)
 {
+#if HOTFIX_THREAD_USE_FPU
+	arch_float_enable(_current);
+#endif
 	test_all_instances(test_single_shot_alarm_notop_instance,
 			   single_channel_alarm_capable);
 }
 
 void test_single_shot_alarm_top(void)
 {
+#if HOTFIX_THREAD_USE_FPU
+	arch_float_enable(_current);
+#endif
 	test_all_instances(test_single_shot_alarm_top_instance,
 			   single_channel_alarm_and_custom_top_capable);
 }
@@ -576,6 +592,9 @@ static bool multiple_channel_alarm_capable(const struct device *dev)
 
 void test_multiple_alarms(void)
 {
+#if HOTFIX_THREAD_USE_FPU
+	arch_float_enable(_current);
+#endif
 	test_all_instances(test_multiple_alarms_instance,
 			   multiple_channel_alarm_capable);
 }
@@ -635,6 +654,9 @@ void test_all_channels_instance(const struct device *dev)
 
 void test_all_channels(void)
 {
+#if HOTFIX_THREAD_USE_FPU
+	arch_float_enable(_current);
+#endif
 	test_all_instances(test_all_channels_instance,
 			   single_channel_alarm_capable);
 }

@@ -5,7 +5,7 @@
  */
 
 #include <zephyr/dt-bindings/gpio/gpio.h>
-#include <zephyr/dt-bindings/timer/riscv-machine-timer.h>
+#include <zephyr/dt-bindings/timer/nuclei-systimer.h>
 #include <zephyr/dt-bindings/i2c/i2c.h>
 
 #include <zephyr/dt-bindings/pwm/pwm.h>
@@ -37,11 +37,12 @@
 		compatible = "gd,gd32vf103-soc", "simple-bus";
 		ranges;
 
-		mtimer: machine-timer@d1000000 {
-			compatible = "riscv,machine-timer";
-			reg = <0xd1000000 0x1
-			       0xd1000008 0x1>;
-			clk-divider = <RISCV_MACHINE_TIMER_DIVIDER_4>;
+		systimer: timer@d1000000 {
+			compatible = "nuclei,systimer";
+			reg = <0xd1000000 0x10000>;
+			interrupts = <3 0>, <7 0>;
+			interrupt-parent = <&eclic>;
+			clk-divider = <NUCLEI_SYSTIMER_DIVIDER_4>;
 		};
 
 		eclic: interrupt-controller@d2000000 {
@@ -347,6 +348,30 @@
 			rcu-periph-clock = <0x705>;
 			rcu-periph-reset = <0x405>;
 			channels = <0>;
+			status = "disabled";
+		};
+
+		dma0: dma@40020000 {
+			compatible = "gd,gd32-dma";
+			reg = <0x40020000 0x400>;
+			interrupt-parent = <&eclic>;
+			interrupts = <30 0>, <31 0>, <32 0>, <33 0>,
+				     <34 0>, <35 0>, <36 0>;
+			rcu-periph-clock = <0x500>;
+			dma-channels = <7>;
+			#dma-cells = <1>;
+			status = "disabled";
+		};
+
+		dma1: dma@40020400 {
+			compatible = "gd,gd32-dma";
+			reg = <0x40020400 0x400>;
+			interrupt-parent = <&eclic>;
+			interrupts = <75 0>, <76 0>, <77 0>, <78 0>,
+				     <79 0>;
+			rcu-periph-clock = <0x501>;
+			dma-channels = <5>;
+			#dma-cells = <1>;
 			status = "disabled";
 		};
 	};

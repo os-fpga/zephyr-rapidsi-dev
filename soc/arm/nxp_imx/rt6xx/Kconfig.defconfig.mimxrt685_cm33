@@ -12,10 +12,6 @@ config PINMUX_MCUX_LPC
 	default y
 	depends on PINMUX
 
-config I2C_MCUX_FLEXCOMM
-	default y if HAS_MCUX_FLEXCOMM
-	depends on I2C
-
 config I2S_MCUX_FLEXCOMM
 	default y if HAS_MCUX_FLEXCOMM
 	depends on I2S
@@ -24,10 +20,6 @@ config I2S_MCUX_FLEXCOMM
 config DMA_MCUX_LPC
 	default y
 	depends on DMA
-
-config CLOCK_CONTROL_MCUX_SYSCON
-	default y if HAS_MCUX_SYSCON
-	depends on CLOCK_CONTROL
 
 config IMX_USDHC
 	default y if (HAS_MCUX_USDHC1 || HAS_MCUX_USDHC2)
@@ -50,10 +42,6 @@ endif # CORTEX_M_SYSTICK
 config COUNTER_MCUX_LPC_RTC
 	default y
 	depends on COUNTER
-
-config WDT_MCUX_WWDT
-	default y
-	depends on WATCHDOG
 
 config USB_MCUX
 	default y

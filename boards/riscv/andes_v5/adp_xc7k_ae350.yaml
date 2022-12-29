@@ -1,0 +1,14 @@
+identifier: adp_xc7k_ae350
+name: Andes ADP-XC7K AE350
+type: mcu
+arch: riscv32
+toolchain:
+  - cross-compile (recommended zephyr-sdk-0.14.2)
+ram: 2GB
+supported:
+  - gpio
+  - counter
+  - spi
+testing:
+  ignore_tags:
+    - bluetooth

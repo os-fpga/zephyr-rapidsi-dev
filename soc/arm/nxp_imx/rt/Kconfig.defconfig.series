@@ -12,18 +12,6 @@ config ROM_START_OFFSET
 	default 0x400 if BOOTLOADER_MCUBOOT
 	default 0x2000 if BOOT_FLEXSPI_NOR || BOOT_SEMC_NOR
 
-config CAN_MCUX_FLEXCAN
-	default y if HAS_MCUX_FLEXCAN
-	depends on CAN
-
-config CLOCK_CONTROL_MCUX_CCM
-	default y if HAS_MCUX_CCM
-	depends on CLOCK_CONTROL
-
-config CLOCK_CONTROL_MCUX_CCM_REV2
-	default y if HAS_MCUX_CCM_REV2
-	depends on CLOCK_CONTROL
-
 config DISPLAY_MCUX_ELCDIF
 	default y if HAS_MCUX_ELCDIF
 	depends on DISPLAY
@@ -35,10 +23,6 @@ config PINCTRL_IMX
 config ENTROPY_MCUX_TRNG
 	default y if HAS_MCUX_TRNG
 	depends on ENTROPY_GENERATOR
-
-config I2C_MCUX_LPI2C
-	default y if HAS_MCUX_LPI2C
-	depends on I2C
 
 config ADC_MCUX_12B1MSPS_SAR
 	default y if HAS_MCUX_12B1MSPS_SAR
@@ -81,14 +65,6 @@ config COUNTER_MCUX_GPT
 	default y if HAS_MCUX_GPT
 
 endif # COUNTER
-
-config ADC_MCUX_LPADC
-	default y if HAS_MCUX_LPADC
-	depends on ADC
-
-config WDT_MCUX_IMX_WDOG
-	default y
-	depends on WATCHDOG
 
 config PM_MCUX_GPC
 	default y if HAS_MCUX_GPC
