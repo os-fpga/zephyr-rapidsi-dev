@@ -1,0 +1,19 @@
+identifier: rapidsi_glv
+name: rapidsi_glv
+type: mcu
+arch: riscv32
+toolchain:
+  - zephyr
+  - cross-compile
+ram: 2GB
+supported:
+  - gpio
+  - usart
+  - flash
+  - wdt
+  - mutex
+  - semaphores
+  - spi
+testing:
+  ignore_tags:
+    - bluetooth
